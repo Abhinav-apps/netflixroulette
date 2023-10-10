@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  height: 350px;
+  background-image: url('./images/netflix_roulette_background_img.jpg');
 }
 
 .App-logo {
@@ -36,3 +38,29 @@
     transform: rotate(360deg);
   }
 }
+
+.genre-button {
+  background-color: orange; /* button background color */
+  color: white; /* button text color */
+}
+
+.genre-button.selected {
+  background-color: red; 
+  color: white; /* Change the text color for the selected button */
+}
+
+.genre-select {
+  margin-top: 50px; 
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: white;
+}
+
+button {
+  background-color: orange;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+

@@ -23,7 +23,7 @@ function App() {
     <div className="App">
       <Counter initialValue={10} />
       <h1>FIND YOUR MOVIE</h1>
-      <SearchForm onSearch={handleSearch} />
+      <SearchForm initialQuery="Goalmaal 4" onSearch={handleSearch} />
       <GenreSelect genres={genres} selectedGenre={selectedGenre} onSelect={handleGenreSelect} />
     </div>
     

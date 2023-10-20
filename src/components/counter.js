@@ -17,10 +17,10 @@ class Counter extends Component {
   };
 
   render() {
-    return React.createElement('div', null,    
+    return React.createElement('div', { className: 'counter-container' },    
       React.createElement('h1', null, `Current count: ${this.state.value}`),
-      React.createElement('button', { onClick: this.increment }, 'Increment count'),
-      React.createElement('button', { onClick: this.decrement }, 'Decrement count')
+      React.createElement('button', { className: 'counter-button-inc', onClick: this.increment }, 'Increment count'),
+      React.createElement('button', { className: 'counter-button-dec', onClick: this.decrement }, 'Decrement count')
     );
   }
 }

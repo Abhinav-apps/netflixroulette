@@ -26,6 +26,7 @@ class SearchForm extends Component {
     return (
       <div className="search-form" >
         <input
+          className="form-input"
           type="text"
           placeholder="What do you want to watch..."
           value={this.state.query}
@@ -33,7 +34,7 @@ class SearchForm extends Component {
           onKeyPress={this.handleKeyPress}
           style={{ width: '30%' }}
         />
-        <button onClick={this.handleSearch}>Search</button>
+        <button className="form-button" onClick={this.handleSearch}>Search</button>
       </div>
     );
   }

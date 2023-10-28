@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './App.css';
-import Counter from './components/counter';
-import SearchForm from './components/searchform';
-import GenreSelect from './components/genreselect';
+import Counter from './Components/Counter';
+import SearchForm from './Components/SearchForm';
+import GenreSelect from './Components/GenreSelect';
 
 function App() {
   

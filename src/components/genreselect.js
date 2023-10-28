@@ -12,6 +12,7 @@ function GenreSelect({ genres, selectedGenre, onSelect }) {
           {genre}
         </button>
       ))}
+      
     </div>
   );
 }

@@ -11,14 +11,14 @@ class MoviesList extends Component {
         <article key={input.id} id={idCount} className="moviecard">
           <MovieCard
             id={input.id}
-            pictureURL={input.poster_path}
-            descriptionShort={input.tagline}
-            name={input.title}
-            year={input.release_date}
+            pictureURL={input.pictureURL}
+            tagline={input.tagline}
+            name={input.name}
+            year={input.year}
             genres={input.genres}
             overview={input.overview}
             runtime={input.runtime}
-            _film={input}
+            film={input}
           />
         </article>
       );

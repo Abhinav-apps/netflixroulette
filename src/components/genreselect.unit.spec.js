@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import GenreSelect from './GenreSelect';
+import GenreSelect from './SortAndGenreControl/GenreSelect';
 
 describe('GenreSelect Component', () => {
   const genres = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror'];
@@ -16,7 +16,7 @@ describe('GenreSelect Component', () => {
     const { getByText } = render(<GenreSelect genres={genres} selectedGenre="Comedy" />);
     const comedyButton = getByText('Comedy');
 
-    expect(comedyButton).toHaveClass('selected');
+    expect(comedyButton).toHaveClass('genre-button red');
   });
 
   it('should call the "onSelect" callback and pass the correct genre in arguments after a click event on a genre button', () => {

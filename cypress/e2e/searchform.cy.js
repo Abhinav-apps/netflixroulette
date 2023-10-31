@@ -5,7 +5,7 @@ describe("SearchForm component", () => {
     cy.get(".form-input").type("Golamaal 3");
     cy.get(".form-button").click();
     cy.on("window:alert", (alertText) => {
-      expect(alertText).to.equal("Performing a search for your movie: Golamaal 3");
+      expect(alertText).to.equal("Searching for: Golamaal 3");
     });
   });
 
@@ -14,7 +14,7 @@ describe("SearchForm component", () => {
     cy.get(".form-input").clear();
     cy.get(".form-input").type("Golamaal 3{enter}");
     cy.on("window:alert", (alertText) => {
-      expect(alertText).to.equal("Performing a search for your movie: Golamaal 3");
+      expect(alertText).to.equal("Searching for: Golamaal 3");
     });
   });
 });

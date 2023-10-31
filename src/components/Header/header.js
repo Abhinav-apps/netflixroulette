@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import Counter from "../Counter";
-import SearchForm from "../SearchForm";
+import Counter from "../Counter/counter";
+import SearchForm from "../SearchForm/searchform";
 import "./header.css";
 
 class Header extends Component {

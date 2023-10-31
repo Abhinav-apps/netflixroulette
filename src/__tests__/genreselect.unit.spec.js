@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import GenreSelect from './SortAndGenreControl/GenreSelect';
+import GenreSelect from '../components/SortAndGenreControl/GenreSelect';
 
 describe('GenreSelect Component', () => {
   const genres = ['Action', 'Comedy', 'Drama', 'Fantasy', 'Horror'];

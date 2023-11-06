@@ -20,6 +20,7 @@ function App() {
   };
 
   const handleMovieFormSubmit = (data) => {
+    closeDialog();
     alert(`Submiting data: ${data}`);
   };
 

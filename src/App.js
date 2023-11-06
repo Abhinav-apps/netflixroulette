@@ -45,14 +45,13 @@ function App() {
 
   return (
     <>
+      <div className="div-container">
+      <button onClick={openDialog}>Add Movie</button>
       {isDialogOpen && (
         <Dialog title="ADD MOVIE" onClose={closeDialog}>
           <MovieForm initialMovie={movieData} onSubmit={(data) => handleMovieFormSubmit(data)} />
         </Dialog>
       )}     
-     {!isDialogOpen && (
-      <div className="div-container">
-      <button onClick={openDialog}>Add Movie</button>
      <Counter initialValue={10} />
      <SearchForm initialSearchQuery="What do you want to watch?" onSearch={handleSearch} />
      <SortAndGenreControl
@@ -66,7 +65,7 @@ function App() {
      <MoviesList onMovieEdit={openDialog} /> {/* Pass the openDialog function to the MoviesList */}
      <br />
    </div>
-    )}
+
     </>
   );
 }

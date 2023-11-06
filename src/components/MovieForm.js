@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styles from './MovieForm.module.css'; // Import the CSS module
 
 function MovieForm({ initialMovie, onSubmit }) {
   const [movie, setMovie] = useState(initialMovie || {});
@@ -23,9 +24,9 @@ function MovieForm({ initialMovie, onSubmit }) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className={styles.form} onSubmit={handleSubmit}>
       <div>
-        <label>Title:</label>
+        <label className={styles.label}>Title:</label>
         <input
           type="text"
           name="title"
@@ -34,7 +35,7 @@ function MovieForm({ initialMovie, onSubmit }) {
         />
       </div>
       <div>
-        <label>Release Year:</label>
+        <label className={styles.label}>Release Year:</label>
         <input
           type="text"
           name="releaseYear"
@@ -43,7 +44,7 @@ function MovieForm({ initialMovie, onSubmit }) {
         />
       </div>
       <div>
-        <label>MovieURL:</label>
+        <label className={styles.label}>MovieURL:</label>
         <input
           type="text"
           name="movieUrl"
@@ -52,7 +53,7 @@ function MovieForm({ initialMovie, onSubmit }) {
         />
       </div>
       <div>
-        <label>Duration:</label>
+        <label className={styles.label}>Duration:</label>
         <input
           type="text"
           name="duration"
@@ -61,16 +62,19 @@ function MovieForm({ initialMovie, onSubmit }) {
         />
       </div>
       <div>
-        <label>Description:</label>
+        <label className={styles.label}>Description:</label>
         <textarea
           name="description"
           value={movie.overview || ''}
           onChange={handleChange}
         />
       </div>
-      <button type="submit">Save</button>
+      <button className={styles.button} type="submit">
+        Save
+      </button>
     </form>
   );
 }
+
 
 export default MovieForm;

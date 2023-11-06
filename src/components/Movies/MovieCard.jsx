@@ -36,6 +36,12 @@ class MovieCard extends Component {
     });
   };
 
+  closeEditMenu = () => {
+    this.setState({
+      showEditMenu: false,
+    });
+  };
+  
   render() {
     return (
       <div className="movie-card" onMouseLeave={this.closeEditMenu}>

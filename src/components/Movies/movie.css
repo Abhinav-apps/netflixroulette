@@ -138,3 +138,63 @@ img {
     text-decoration: none;
     cursor: pointer;
 }
+
+/* Styles for the three dots icon overlay */
+.movie-card {
+    position: relative;
+  }
+  
+  .dots-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px; /* Position on the left side */
+    background: lightgray;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1;
+  }
+  
+  /* Styles for the edit/delete menu */
+  .edit-menu {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    display: none;
+    flex-direction: column;
+    padding: 5px;
+    top: 50px; /* Position the menu just below the three dots */
+    left: 10px; /* Position the menu on the left side */
+  }
+  
+  .movie-card:hover .edit-menu {
+    display: flex;
+  }
+  
+  .edit-option {
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .edit-option:hover {
+    background: #eee;
+  }
+  
+/* Add styles for the delete confirmation dialog buttons */
+.delete-dialog-buttons {
+    display: flex;
+    justify-content: center; /* Equal spacing between buttons */
+    margin-top: 10px; /* Adjust the top margin as needed */
+  }
+  
+  .delete-dialog-buttons button {
+    padding: 10px 20px; /* Adjust the padding as needed */
+    font-size: 16px; /* Adjust the font size as needed */
+  }

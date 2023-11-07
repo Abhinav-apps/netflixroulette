@@ -1,0 +1,146 @@
+[
+    {
+        "id": 337167,
+        "name": "Fifty Shades Freed",
+        "tagline": "Don't miss the climax",
+        "vote_average": 6.1,
+        "vote_count": 1195,
+        "year": "2018-02-07",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/3kcEGnYBHDeqmdYf8ZRbKdfmlUy.jpg",
+        "overview": "Believing they have left behind shadowy figures from their past, newlyweds Christian and Ana fully embrace an inextricable connection and shared life of luxury. ",
+        "budget": 55000000,
+        "revenue": 136906000,
+        "genres": [
+            "Drama",
+            "Romance"
+        ],
+        "runtime": 106
+    },
+    {
+        "id": 181808,
+        "name": "Star Wars: The Last Jedi",
+        "tagline": "The Saga Continues",
+        "vote_average": 7.1,
+        "vote_count": 4732,
+        "year": "2017-12-13",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/kOVEVeg59E0wsnXmF9nrh6OmWII.jpg",
+        "overview": "Rey develops her newly discovered abilities with the guidance of Luke Skywalker, who is unsettled by the strength of her powers. Meanwhile, the Resistance prepares to do battle with the First Order.",
+        "budget": 200000000,
+        "revenue": 1325937250,
+        "genres": [
+            "Fantasy",
+            "Adventure",
+            "Science Fiction"
+        ],
+        "runtime": 152
+    },
+    {
+        "id": 284054,
+        "name": "Black Panther",
+        "tagline": "Long live the king",
+        "vote_average": 7.3,
+        "vote_count": 3788,
+        "year": "2018-02-13",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/uxzzxijgPIY7slzFvMotPv8wjKA.jpg",
+        "overview": "King T'Challa returns home from America to the reclusive, technologically advanced African nation of Wakanda to serve as his country's new leader.",
+        "budget": 200000000,
+        "revenue": 1245257672,
+        "genres": [
+            "Action",
+            "Adventure",
+            "Fantasy",
+            "Science Fiction"
+        ],
+        "runtime": 134
+    },
+    {
+        "id": 354912,
+        "name": "Coco",
+        "tagline": "The celebration of a lifetime",
+        "vote_average": 7.8,
+        "vote_count": 3619,
+        "year": "2017-10-27",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/eKi8dIrr8voobbaGzDpe8w0PVbC.jpg",
+        "overview": "Despite his family’s baffling generations-old ban on music, Miguel dreams of becoming an accomplished musician like his idol, Ernesto de la Cruz.",
+        "budget": 175000000,
+        "revenue": 700920729,
+        "genres": [
+            "Adventure",
+            "Comedy",
+            "Family",
+            "Animation"
+        ],
+        "runtime": 105
+    },
+    {
+        "id": 333339,
+        "name": "Ready Player One",
+        "tagline": "A better reality awaits.",
+        "vote_average": 8.1,
+        "vote_count": 617,
+        "year": "2018-03-28",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/pU1ULUq8D3iRxl1fdX2lZIzdHuI.jpg",
+        "overview": "When the creator of a popular video game system dies, a virtual contest is created to compete for his fortune.",
+        "budget": 175000000,
+        "revenue": 0,
+        "genres": [
+            "Adventure",
+            "Science Fiction",
+            "Action"
+        ],
+        "runtime": 140
+    },
+    {
+        "id": 338970,
+        "name": "Tomb Raider",
+        "tagline": "Her legend begins",
+        "vote_average": 6.2,
+        "vote_count": 817,
+        "year": "2018-03-08",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/ePyN2nX9t8SOl70eRW47Q29zUFO.jpg",
+        "overview": "Lara Croft, the fiercely independent daughter of a missing adventurer, must push herself beyond her limits when she finds herself on the island where her father disappeared.",
+        "budget": 94000000,
+        "revenue": 126025000,
+        "genres": [
+            "Action",
+            "Adventure"
+        ],
+        "runtime": 118
+    },
+    {
+        "id": 284053,
+        "name": "Thor: Ragnarok",
+        "tagline": "No Hammer. No Problem.",
+        "vote_average": 7.4,
+        "vote_count": 5349,
+        "year": "2017-10-25",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/rzRwTcFvttcN1ZpX2xv4j3tSdJu.jpg",
+        "overview": "Thor is imprisoned on the other side of the universe and finds himself in a race against time to get back to Asgard to stop Ragnarok.",
+        "budget": 180000000,
+        "revenue": 854229371,
+        "genres": [
+            "Action",
+            "Adventure",
+            "Fantasy"
+        ],
+        "runtime": 130
+    },
+    {
+        "id": 321612,
+        "name": "Beauty and the Beast",
+        "tagline": "Be our guest.",
+        "vote_average": 6.8,
+        "vote_count": 7861,
+        "year": "2017-03-16",
+        "pictureURL": "https://image.tmdb.org/t/p/w500/tWqifoYuwLETmmasnGHO7xBjEtt.jpg",
+        "overview": "A live-action adaptation of Disney's version of the classic tale of a cursed prince and a beautiful young woman who helps him break the spell.",
+        "budget": 160000000,
+        "revenue": 1263521126,
+        "genres": [
+            "Family",
+            "Fantasy",
+            "Romance"
+        ],
+        "runtime": 129
+    }
+]

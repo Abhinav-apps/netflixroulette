@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import Counter from './counter';
+import Counter from '../components/Counter';
 
 describe('Counter Component', () => {
   it('should render the initial value provided in props', () => {

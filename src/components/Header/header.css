@@ -1,0 +1,16 @@
+.div-container {
+    height: 225px;
+    text-align: center;
+    background-image: url('../../images/image.jpg');
+}
+
+button {
+    background-color: orange;
+    color: white;
+    font-size: 16px;
+    outline: none;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: white;
+  }

@@ -4,17 +4,17 @@ import "./movie.css";
 
 class MovieDetails extends Component {
   render() {
-    const { pictureURL, name, year, vote_average, runtime, overview } =
+    const { poster_path, name, release_date, vote_average, runtime, overview } =
       this.props.movieInfo;
 
     return (
       <div className="movie-details">
         <div className="movie-poster">
-          <img src={pictureURL} alt={name} />
+          <img src={poster_path} alt={name} />
         </div>
         <div className="movie-info">
           <h2>{name}</h2>
-          <p>Release Year: {year}</p>
+          <p>Release Year: {release_date}</p>
           <p>Rating: {vote_average}</p>
           <p>Duration: {runtime}</p>
           <p>{overview}</p>

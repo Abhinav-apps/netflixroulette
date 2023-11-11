@@ -6,10 +6,10 @@ import '../index.css';
 import '../components/Header/header.css';
 import MoviesList from './Movies/MovieList';
 import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
-import Dialog from './Dialog'; // Import the Dialog component
-import MovieForm from './MovieForm'; // Import the MovieForm component
+import Dialog from './Dialog';
+import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
-import MovieDetails from '../components/Movies/MovieDetails'; 
+import MovieDetails from '../components/Movies/MovieDetails';
 
 
 function MovieListPage() {
@@ -19,6 +19,9 @@ function MovieListPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const limit = 12;
+  const [totalAmount, setTotalAmount] = useState(0)
 
   useEffect(() => {
     //console.log('use effect triggered');
@@ -30,8 +33,8 @@ function MovieListPage() {
         const params = {
           search: searchQuery,
           searchBy: searchQuery ? 'title' : 'genres',
-          offset: 0, // Add the offset parameter if needed
-          limit: 10, // Add the limit parameter if needed
+          offset: offset,
+          limit: limit,
           sortBy: currentSort,
           sortOrder: 'desc',
           filter: searchQuery ? null : selectedGenre,
@@ -44,6 +47,8 @@ function MovieListPage() {
         //console.log('response:', response);
     
         setMovies(response.data.data);
+        setTotalAmount(response.data.totalAmount);
+        //console.log('totalAmount' + totalAmount);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -52,7 +57,7 @@ function MovieListPage() {
     fetchData();
 
     return () => abortController.abort();
-  }, [searchQuery, currentSort, selectedGenre]);
+  }, [searchQuery, currentSort, selectedGenre, offset]);
 
   const handleMovieSelect = (movie) => {
     setSelectedMovie(movie);
@@ -75,14 +80,31 @@ function MovieListPage() {
   const handleSearch = (query) => {
     //console.log('Search button clicked:', query);
     setSearchQuery(query);
-    setSelectedGenre(null)
+    setSelectedGenre(null);
+    setOffset(0);
   };
 
   const handleGenreChange = (query) => {
     //console.log('genre changed to:', query);
     setSearchQuery(null);
-    setSelectedGenre(query === 'All' ? null : query)
+    setSelectedGenre(query === 'All' ? null : query);
+    setOffset(0);
   };
+
+  const handleNextPage = () => {
+    setOffset(offset + limit);
+  };
+
+  const handlePrevPage = () => {
+    if (offset >= limit) {
+      setOffset(offset - limit);
+    }
+  };
+
+  const currentPage = Math.floor(offset / limit) + 1;
+  //console.log( 'totalAmount: '+ totalAmount);
+  const totalPages = Math.ceil(totalAmount / limit);
+  //console.log('totalPages: '+ totalPages);
 
   return (
     <div className="div-container">
@@ -107,13 +129,24 @@ function MovieListPage() {
       {selectedMovie ? (
         <MovieDetails movieInfo={selectedMovie} />
       ) : (
-        <MoviesList
-          searchQuery={searchQuery}
-          selectedGenre={selectedGenre}
-          currentSort={currentSort}
-          onMovieSelect={handleMovieSelect}
-          movies={movies}
-        />
+        <>
+          <MoviesList
+            searchQuery={searchQuery}
+            selectedGenre={selectedGenre}
+            currentSort={currentSort}
+            onMovieSelect={handleMovieSelect}
+            movies={movies}
+          />
+          <div>
+            <button onClick={handlePrevPage} disabled={offset === 0}>
+              Previous Page
+            </button>
+            <span>
+            &nbsp;&nbsp;Page {currentPage} of {totalPages}&nbsp;&nbsp;
+              </span>
+            <button onClick={handleNextPage}>&nbsp;&nbsp;&nbsp;Next Page&nbsp;&nbsp;&nbsp;</button>
+          </div>
+        </>
       )}
       <br />
     </div>

@@ -21,6 +21,7 @@ function MovieListPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
+    //console.log('use effect triggered');
     const abortController = new AbortController();
     const signal = abortController.signal;
 
@@ -28,17 +29,19 @@ function MovieListPage() {
       try {
         const params = {
           search: searchQuery,
+          searchBy: searchQuery ? 'title' : 'genres',
           offset: 0, // Add the offset parameter if needed
           limit: 10, // Add the limit parameter if needed
           sortBy: currentSort,
-          filter: selectedGenre,
+          sortOrder: 'desc',
+          filter: searchQuery ? null : selectedGenre,
         };
         const response = await axios.get('http://localhost:4000/movies', {
           params,
           signal,
         });
-        console.log('params:', params);
-        console.log('response:', response);
+        //console.log('params:', params);
+        //console.log('response:', response);
     
         setMovies(response.data.data);
       } catch (error) {
@@ -70,7 +73,15 @@ function MovieListPage() {
   };
 
   const handleSearch = (query) => {
+    //console.log('Search button clicked:', query);
     setSearchQuery(query);
+    setSelectedGenre(null)
+  };
+
+  const handleGenreChange = (query) => {
+    //console.log('genre changed to:', query);
+    setSearchQuery(null);
+    setSelectedGenre(query === 'All' ? null : query)
   };
 
   return (
@@ -88,7 +99,7 @@ function MovieListPage() {
       <SortAndGenreControl
         genres={['All', 'Documentary', 'Comedy', 'Horror', 'Crime', 'Action']}
         selectedGenre={selectedGenre}
-        onSelect={setSelectedGenre}
+        onSelect={handleGenreChange}
         currentSort={currentSort}
         onSortChange={setCurrentSort}
       />

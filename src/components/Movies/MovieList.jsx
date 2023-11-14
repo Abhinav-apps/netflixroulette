@@ -1,35 +1,30 @@
-import React, { Component } from "react";
-import moviesData from "../../data/movies.json";
+// MoviesList.js
+import React from "react";
 import MovieCard from "./MovieCard";
 import "./movie.css";
 
-class MoviesList extends Component {
-  render() {
-    const renderingArray = moviesData.map((input) => {
-      const idCount = input.id;
-      return (
-        <article key={input.id} id={idCount} className="moviecard">
-          <MovieCard
-            id={input.id}
-            pictureURL={input.pictureURL}
-            tagline={input.tagline}
-            name={input.name}
-            year={input.year}
-            genres={input.genres}
-            overview={input.overview}
-            runtime={input.runtime}
-            film={input}
-          />
-        </article>
-      );
-    });
-
+function MoviesList({ movies, onMovieSelect }) {
+  const renderingArray = movies.map((input) => {
+    const idCount = input.id;
     return (
-      <>
-        <section className="movieslist"> {renderingArray} </section>
-      </>
+      <article key={input.id} id={idCount} className="moviecard">
+        <MovieCard
+          id={input.id}
+          pictureURL={input.poster_path}
+          tagline={input.tagline}
+          name={input.name}
+          year={input.release_date}
+          genres={input.genres}
+          overview={input.overview}
+          runtime={input.runtime}
+          film={input}
+          onSelect={() => onMovieSelect(input)}
+        />
+      </article>
     );
-  }
+  });
+
+  return <section className="movieslist">{renderingArray}</section>;
 }
 
 export default MoviesList;

@@ -12,7 +12,7 @@ function MoviesList({ movies, onMovieSelect }) {
           id={input.id}
           pictureURL={input.poster_path}
           tagline={input.tagline}
-          name={input.name}
+          name={input.title}
           year={input.release_date}
           genres={input.genres}
           overview={input.overview}

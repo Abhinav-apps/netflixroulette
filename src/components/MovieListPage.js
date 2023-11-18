@@ -27,11 +27,12 @@ function MovieListPage() {
   const [searchParams] = useSearchParams();
   
     // Function to get initial values from URL parameters
-  useEffect(() => {
+    useEffect(() => {
       const params = new URLSearchParams(searchParams);
       setSearchQuery(params.get('query') || '');
       setSelectedGenre(params.get('genre') || '');
-      setCurrentSort(params.get('sortBy') || 'releaseDate');
+      setCurrentSort(params.get('sortBy') || 'releaseDate'); // Ensure consistent casing
+      setOffset(parseInt(params.get('offset')) || 0);
     }, [searchParams]);
 
     // Function to update URL parameters when state changes

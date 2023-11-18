@@ -8,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<MovieListPage />} />
-        <Route path="/:movieId" element={<MovieDetailsWrapper />} />
+        <Route path="/:movieIdParam" element={<MovieListPage />} />
       </Routes>
     </Router>
   );

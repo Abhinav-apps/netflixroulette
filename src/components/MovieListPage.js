@@ -10,6 +10,8 @@ import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
 import Dialog from './Dialog';
 import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
+import { useParams } from 'react-router-dom';
+import MovieDetails from './Movies/MovieDetails';
 
 function MovieListPage() {
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -24,6 +26,27 @@ function MovieListPage() {
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+
+  const [showModal, setShowModal] = useState(false);
+  const [movieInfo, setMovieInfo] = useState(null);
+  const { movieIdParam } = useParams(); // Get the movieId from the URL params
+
+  useEffect(() => {
+    const fetchMovieDetails = async () => {
+      if (movieIdParam) {
+        try {
+          const response = await axios.get(`http://localhost:4000/movies/${movieIdParam}`);
+          setMovieInfo(response.data); 
+          setShowModal(true);
+        } catch (error) {
+          console.error('Error fetching movie details:', error);
+          setMovieInfo(null);
+        }
+      }
+    };
+
+    fetchMovieDetails();
+  }, [movieIdParam]);
   
     // Function to get initial values from URL parameters
     useEffect(() => {
@@ -113,6 +136,10 @@ useEffect(() => {
       setOffset(offset - limit);
     }
   };
+   
+  const toggleModal = () => {
+    setShowModal(false);
+  }
 
   const currentPage = Math.floor(offset / limit) + 1;
   const totalPages = Math.ceil(totalAmount / limit);
@@ -137,6 +164,16 @@ useEffect(() => {
         onSortChange={setCurrentSort}
       />
       <br />
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={toggleModal}>
+              &times;
+            </span>
+            <MovieDetails movieInfo={movieInfo} />
+          </div>
+        </div>
+      )}
       {selectedMovie ? (
         <Link to={`/${selectedMovie.id}`}>View Movie Details</Link> // Using Link from react-router-dom
       ) : (

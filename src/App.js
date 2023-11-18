@@ -1,14 +1,14 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MovieListPage from './components/MovieListPage';
-import MovieDetails from './components/Movies/MovieDetails';
+import MovieDetailsWrapper from './components/MovieDetailsWrapper';
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MovieListPage />} />
-        <Route path="/:movieId" element={<MovieDetails />} />
+        <Route path="/:movieId" element={<MovieDetailsWrapper />} />
       </Routes>
     </Router>
   );

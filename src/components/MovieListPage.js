@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'; 
 import axios from 'axios';
 import Counter from './counter';
 import SearchForm from './searchform';
@@ -10,7 +10,6 @@ import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
 import Dialog from './Dialog';
 import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
-import MovieDetails from '../components/Movies/MovieDetails';
 
 function MovieListPage() {
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -20,7 +19,7 @@ function MovieListPage() {
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [offset, setOffset] = useState(0);
-  const limit = 12;
+  const limit = 7;
   const [totalAmount, setTotalAmount] = useState(0);
 
   const navigate = useNavigate();
@@ -74,7 +73,9 @@ useEffect(() => {
   
 
   const handleMovieSelect = (movie) => {
-    setSelectedMovie(movie);
+    const currentSearchParams = new URLSearchParams(window.location.search);
+    currentSearchParams.set('movieId', movie.id);
+    //navigate(`?${currentSearchParams.toString()}`);
   };
 
   const openDialog = () => {
@@ -137,7 +138,7 @@ useEffect(() => {
       />
       <br />
       {selectedMovie ? (
-        <MovieDetails movieInfo={selectedMovie} />
+        <Link to={`/${selectedMovie.id}`}>View Movie Details</Link> // Using Link from react-router-dom
       ) : (
         <>
           <MoviesList

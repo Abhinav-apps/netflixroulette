@@ -1,60 +1,64 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import ReactImageFallback from "react-image-fallback";
-import placeholder from "../../images/film-poster-placeholder.png";
-import "./movie.css";
-import MovieDetails from "./MovieDetails";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import ReactImageFallback from 'react-image-fallback';
+import placeholder from '../../images/film-poster-placeholder.png';
+import './movie.css';
+import MovieDetails from './MovieDetails';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-class MovieImage extends Component {
-  constructor(props) {
-    super(props);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
-  }
+function MovieImage({ img, filmTitle, film }) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showModal, setShowModal] = useState(false);
 
-  state = {
-    showModal: false,
-  };
-
-  toggleModal = () => {
-    this.setState({ showModal: !this.state.showModal }, () => {
-      if (this.state.showModal) {
-        document.addEventListener('keydown', this.handleKeyPress);
-      } else {
-        document.removeEventListener('keydown', this.handleKeyPress);
-      }
-    });
-  };
-
-  handleKeyPress = (event) => {
-    if (event.keyCode === 27) {
-      this.setState({ showModal: false });
+  const toggleModal = () => {
+    setShowModal(!showModal);
+    if (!showModal) {
+      document.addEventListener('keydown', handleKeyPress);
+    } else {
+      document.removeEventListener('keydown', handleKeyPress);
     }
   };
 
-  render() {
-    const { img, filmTitle, film } = this.props;
-    return (
-      <div>
-        <ReactImageFallback
-          src={this.props.img}
-          fallbackImage={placeholder}
-          onClick={this.toggleModal}
-          title={this.props.filmTitle}
-          className="filcard-image"
-        />
-        {this.state.showModal && (
-          <div className="modal">
-            <div className="modal-content">
-              <span className="close" onClick={this.toggleModal}>
-                &times;
-              </span>
-              <MovieDetails movieInfo={film} />
-            </div>
+  const handleKeyPress = (event) => {
+    if (event.keyCode === 27) {
+      setShowModal(false);
+    }
+  };
+
+  const handleMovieClick = () => {
+    const searchParams = new URLSearchParams(location.search);
+    // Update path parameter
+    //searchParams.set('movieId', film.id);
+    // Build the new URL
+    const newPath = `/${film.id}`;
+    const newUrl = `${newPath}?${searchParams.toString()}`;
+    // Update the URL without redirection
+    window.history.pushState({}, '', newUrl);
+    setShowModal(true);
+  };
+
+  return (
+    <div>
+      <ReactImageFallback
+        src={img}
+        fallbackImage={placeholder}
+        onClick={handleMovieClick} // Updated onClick event
+        title={filmTitle}
+        className="filcard-image"
+      />
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={toggleModal}>
+              &times;
+            </span>
+            <MovieDetails movieInfo={film} />
           </div>
-        )}
-      </div>
-    );
-  }
+        </div>
+      )}
+    </div>
+  );
 }
 
 MovieImage.propTypes = {

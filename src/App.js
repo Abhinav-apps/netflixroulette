@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MovieListPage from './components/MovieListPage';
-
+import MovieDetails from './components/Movies/MovieDetails';
 
 function App() {
-
   return (
-    <div>
-      <MovieListPage />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MovieListPage />} />
+        <Route path="/:movieId" element={<MovieDetails />} />
+      </Routes>
+    </Router>
   );
 }
 

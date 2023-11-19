@@ -65,6 +65,7 @@ useEffect(() => {
   params.set('offset', offset.toString()); // Include offset in URL params
 
   navigate(`/?${params.toString()}`);
+  //window.history.pushState({}, '', `/?${params.toString()}`);
 }, [searchQuery, selectedGenre, currentSort, offset, navigate]);
 
   
@@ -79,7 +80,7 @@ useEffect(() => {
             limit: limit,
             sortBy: currentSort,
             sortOrder: 'desc',
-            filter: searchQuery ? null : selectedGenre,
+            filter: searchQuery ? null : (selectedGenre === 'All' ? null : selectedGenre),
           };
           const response = await axios.get('http://localhost:4000/movies', { params });
     
@@ -122,7 +123,7 @@ useEffect(() => {
 
   const handleGenreChange = (query) => {
     setSearchQuery(null);
-    setSelectedGenre(query === 'All' ? null : query);
+    setSelectedGenre(query);
     setOffset(0);
   };
 

@@ -16,7 +16,6 @@ import MovieDetails from './Movies/MovieDetails';
 function MovieListPage() {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [currentSort, setCurrentSort] = useState('releaseDate');
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -174,9 +173,6 @@ useEffect(() => {
           </div>
         </div>
       )}
-      {selectedMovie ? (
-        <Link to={`/${selectedMovie.id}`}>View Movie Details</Link> // Using Link from react-router-dom
-      ) : (
         <>
           <MoviesList
             searchQuery={searchQuery}
@@ -195,7 +191,6 @@ useEffect(() => {
             <button onClick={handleNextPage}>&nbsp;&nbsp;&nbsp;Next Page&nbsp;&nbsp;&nbsp;</button>
           </div>
         </>
-      )}
       <br />
     </div>
   );

@@ -1,43 +1,42 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 
-class SearchForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      query: this.props.initialQuery || '',
-    };
-  }
+function SearchForm({ query: initialQuery = '', onSearch }) {
+  const [query, setQuery] = useState(initialQuery);
 
-  handleInputChange = (e) => {
-    this.setState({ query: e.target.value });
+  useEffect(() => {
+    setQuery(initialQuery);
+  }, [initialQuery]);
+
+  const handleInputChange = (e) => {
+    setQuery(e.target.value);
   };
 
-  handleSearch = () => {
-    this.props.onSearch(this.state.query);
+  const handleSearch = () => {
+    onSearch(query);
   };
 
-  handleKeyPress = (e) => {
+  const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      this.handleSearch();
+      handleSearch();
     }
   };
 
-  render() {
-    return (
-      <div className="search-form" >
-        <input
-          className="form-input"
-          type="text"
-          placeholder="What do you want to watch..."
-          value={this.state.query}
-          onChange={this.handleInputChange}
-          onKeyPress={this.handleKeyPress}
-          style={{ width: '30%' }}
-        />
-        <button className="form-button" onClick={this.handleSearch}>Search</button>
-      </div>
-    );
-  }
+  return (
+    <div className="search-form">
+      <input
+        className="form-input"
+        type="text"
+        placeholder="What do you want to watch..."
+        value={query}
+        onChange={handleInputChange}
+        onKeyPress={handleKeyPress}
+        style={{ width: '30%' }}
+      />
+      <button className="form-button" onClick={handleSearch}>
+        Search
+      </button>
+    </div>
+  );
 }
 
 export default SearchForm;

@@ -63,9 +63,13 @@ useEffect(() => {
   if (selectedGenre) params.set('genre', selectedGenre);
   if (currentSort) params.set('sortBy', currentSort);
   params.set('offset', offset.toString()); // Include offset in URL params
-
-  navigate(`/?${params.toString()}`);
-  //window.history.pushState({}, '', `/?${params.toString()}`);
+  if (movieIdParam) {
+    //window.history.pushState({}, '', `/${movieIdParam}?${params.toString()}`);
+    navigate(`/${movieIdParam}?${params.toString()}`);
+  } else {
+    //window.history.pushState({}, '', `/?${params.toString()}`);
+    navigate(`/?${params.toString()}`);
+  }
 }, [searchQuery, selectedGenre, currentSort, offset, navigate]);
 
   
@@ -138,7 +142,15 @@ useEffect(() => {
   };
    
   const toggleModal = () => {
+    removePathParam();
     setShowModal(false);
+  }
+
+  const removePathParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = '/';
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
   }
 
   const currentPage = Math.floor(offset / limit) + 1;

@@ -10,7 +10,13 @@ function MovieForm({ initialMovie, onSubmit }) {
   
   const handleFormSubmit = (data) => {
     const newData = { ...data, runtime: parseFloat(data.runtime) };
-    onSubmit(newData);
+    // Check if 'genres' is an empty array, and exclude it from the newData if empty
+    if (Array.isArray(data.genres) && data.genres.length === 0) {
+      const { genres, ...formDataWithoutGenres } = newData;
+      onSubmit(formDataWithoutGenres);
+    } else {
+      onSubmit(newData);
+    }
   };
 
   React.useEffect(() => {
@@ -82,7 +88,7 @@ function MovieForm({ initialMovie, onSubmit }) {
           <label className={styles.label}>Genres:</label>
           <select
             multiple
-            {...register('genres', { required: 'Select at least one genre' })}
+            {...register('genres')}
           >
             <option value="Documentary">Documentary</option>
             <option value="Crime">Crime</option>

@@ -20,7 +20,7 @@ function MovieListPage() {
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [offset, setOffset] = useState(0);
-  const limit = 7;
+  const limit = 8;
   const [totalAmount, setTotalAmount] = useState(0);
 
   const navigate = useNavigate();

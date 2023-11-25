@@ -121,7 +121,7 @@ useEffect(() => {
     navigate(newUrl);
   };
 
-  const handleMovieFormSubmit = async (data) => {
+  const handleMovieAddFormSubmit = async (data) => {
     try {
       closeDialog();
       //alert(`Submitting data: ${JSON.stringify(data)}`);
@@ -136,6 +136,17 @@ useEffect(() => {
       console.error('Error adding movie:', error);
     }
   };
+
+  const handleMovieEditFormSubmit = async (data) => {
+    try {
+      const response = await axios.put('http://localhost:4000/movies', data);
+      const urlParams = new URLSearchParams(window.location.search);
+      // to refresh page
+      window.location.reload();
+    } catch (error) {
+      console.error('Error adding movie:', error);
+    }
+  }
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -181,7 +192,7 @@ useEffect(() => {
       </button>
       {isDialogOpen && (
         <Dialog title="ADD MOVIE" onClose={closeDialog}>
-          <MovieForm onSubmit={(data) => handleMovieFormSubmit(data)} />
+          <MovieForm onSubmit={(data) => handleMovieAddFormSubmit(data)} />
         </Dialog>
       )}
       <Counter initialValue={10} />
@@ -211,6 +222,7 @@ useEffect(() => {
             currentSort={currentSort}
             onMovieSelect={handleMovieSelect}
             movies={movies}
+            handleMovieEditFormSubmit={handleMovieEditFormSubmit}
           />
           <div>
             <button onClick={handlePrevPage} disabled={offset === 0}>

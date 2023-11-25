@@ -3,7 +3,7 @@ import React from "react";
 import MovieCard from "./MovieCard";
 import "./movie.css";
 
-function MoviesList({ movies, onMovieSelect }) {
+function MoviesList({ movies, onMovieSelect, handleMovieEditFormSubmit }) {
   const renderingArray = movies.map((input) => {
     const idCount = input.id;
     return (
@@ -19,6 +19,7 @@ function MoviesList({ movies, onMovieSelect }) {
           runtime={input.runtime}
           film={input}
           onSelect={() => onMovieSelect(input)}
+          handleMovieEditFormSubmit={handleMovieEditFormSubmit}
         />
       </article>
     );

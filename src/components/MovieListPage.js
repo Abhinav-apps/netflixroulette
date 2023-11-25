@@ -66,6 +66,10 @@ useEffect(() => {
   if (movieIdParam) {
     //window.history.pushState({}, '', `/${movieIdParam}?${params.toString()}`);
     navigate(`/${movieIdParam}?${params.toString()}`);
+  } else if (window.location.pathname === '/new') {
+    setIsDialogOpen(true);
+    // to ensure that the '/new' path remains in the URL
+    navigate(`/new?${params.toString()}`);
   } else {
     //window.history.pushState({}, '', `/?${params.toString()}`);
     navigate(`/?${params.toString()}`);
@@ -111,6 +115,10 @@ useEffect(() => {
 
   const closeDialog = () => {
     setIsDialogOpen(false);
+    const urlParams = new URLSearchParams(window.location.search);
+    const newUrl = `/?${urlParams.toString()}`;
+    //alert ('newURL' + newUrl);
+    navigate(newUrl);
   };
 
   const handleMovieFormSubmit = async (data) => {

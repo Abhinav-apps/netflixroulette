@@ -55,18 +55,12 @@ function MovieForm({ initialMovie, onSubmit }) {
       </div>
       <div className={styles.row}>
         <div className={styles.col}>
-          <label className={styles.label}>Movie URL:</label>
+          <label className={styles.label}>Tagline:</label>
           <input
             type="text"
-            {...register('poster_path', {
-              required: 'Movie URL is required',
-              pattern: {
-                value: /^(ftp|http|https):\/\/[^ "]+$/,
-                message: 'Please enter a valid URL',
-              },
-            })}
+            {...register('tagline', { required: 'Tagline is required' })}
           />
-          {errors.poster_path && <span>{errors.poster_path.message}</span>}
+          {errors.tagline && <span>{errors.tagline.message}</span>}
         </div>
         <div className={styles.col}>
           <label className={styles.label}>Duration:</label>
@@ -81,6 +75,22 @@ function MovieForm({ initialMovie, onSubmit }) {
             })}
           />
           {errors.runtime && <span>{errors.runtime.message}</span>}
+        </div>
+      </div>
+      <div className={styles.row}>
+      <div className={styles.col}>
+          <label className={styles.label}>Movie URL:</label>
+          <input
+            type="text"
+            {...register('poster_path', {
+              required: 'Movie URL is required',
+              pattern: {
+                value: /^(ftp|http|https):\/\/[^ "]+$/,
+                message: 'Please enter a valid URL',
+              },
+            })}
+          />
+          {errors.poster_path && <span>{errors.poster_path.message}</span>}
         </div>
       </div>
       <div className={styles.row}>

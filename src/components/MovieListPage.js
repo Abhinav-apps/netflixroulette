@@ -22,6 +22,8 @@ function MovieListPage() {
   const [offset, setOffset] = useState(0);
   const limit = 8;
   const [totalAmount, setTotalAmount] = useState(0);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [newMovieId, setNewMovieId] = useState('');
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -101,8 +103,8 @@ useEffect(() => {
     
       fetchData();
     }, [searchQuery, currentSort, selectedGenre, offset, limit]);
-  
 
+  
   const handleMovieSelect = (movie) => {
     const currentSearchParams = new URLSearchParams(window.location.search);
     currentSearchParams.set('movieId', movie.id);
@@ -127,12 +129,10 @@ useEffect(() => {
       //alert(`Submitting data: ${JSON.stringify(data)}`);
       const response = await axios.post('http://localhost:4000/movies', data);
       const newMovieId = response.data.id;
-      //alert('newMovieId: '+newMovieId);
-      const urlParams = new URLSearchParams(window.location.search);
-      const newUrl = `/${newMovieId}?${urlParams.toString()}`;
-      //alert ('newURL' + newUrl);
-      navigate(newUrl);
+      setNewMovieId(newMovieId);
+      setSuccessMessage('Movie Added Successfully...');
     } catch (error) {
+      setSuccessMessage('Error occured while trying to add...');
       console.error('Error adding movie:', error);
     }
   };
@@ -141,10 +141,25 @@ useEffect(() => {
     try {
       const response = await axios.put('http://localhost:4000/movies', data);
       const urlParams = new URLSearchParams(window.location.search);
+      setSuccessMessage('Movie Edited Successfully...');
+    } catch (error) {
+      setSuccessMessage('Error occured while trying to edit...');
+      console.error('Error adding movie:', error);
+    }
+  }
+
+  const closeSuccessMessageDialog = () => {
+    if (successMessage  === 'Movie Edited Successfully...') {
+      setSuccessMessage('');
       // to refresh page
       window.location.reload();
-    } catch (error) {
-      console.error('Error adding movie:', error);
+    }
+    if (successMessage  === 'Movie Added Successfully...' ){
+      setSuccessMessage('');
+      // to update path with movieId
+      const urlParams = new URLSearchParams(window.location.search);
+      const newUrl = `/${newMovieId}?${urlParams.toString()}`;
+      navigate(newUrl);
     }
   }
 
@@ -193,6 +208,10 @@ useEffect(() => {
       {isDialogOpen && (
         <Dialog title="ADD MOVIE" onClose={closeDialog}>
           <MovieForm onSubmit={(data) => handleMovieAddFormSubmit(data)} />
+        </Dialog>
+      )}
+       {successMessage && (
+        <Dialog title={successMessage} onClose={() => closeSuccessMessageDialog()}>
         </Dialog>
       )}
       <Counter initialValue={10} />

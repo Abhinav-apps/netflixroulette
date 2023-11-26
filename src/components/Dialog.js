@@ -14,12 +14,14 @@ class Dialog extends Component {
           <div className="dialog-overlay">
             <div className="dialog">
               <div className="dialog-header">
-                <h2>{title}</h2>
+                <h2 className="dialog-title">{title}</h2>
                 <button className="close-button" onClick={onClose}>
                   ×
                 </button>
-              </div>
-              <div className="dialog-body">{children}</div>
+                </div>
+                {children && (
+                  <div className="dialog-body">{children}</div>
+                )}
             </div>
           </div>
         </FocusTrap>

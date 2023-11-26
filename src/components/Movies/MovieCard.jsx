@@ -4,7 +4,7 @@ import MovieImage from "./MovieImage";
 import MovieInfo from "./MovieInfo";
 import "./movie.css";
 import Dialog from "../Dialog";
-import MovieForm from "../MovieForm";
+import EditMovieDialog from "../EditMovieDialog";
 
 function MovieCard(props) {
   const [showEditMenu, setShowEditMenu] = useState(false);
@@ -84,17 +84,15 @@ function MovieCard(props) {
       />
       <MovieInfo description={props.tagline} name={props.name} year={props.year} />
       {isEditDialogOpen && (
-        <Dialog title="Edit Movie" onClose={closeEditDialog}>
-          <MovieForm
-            initialMovie={movieData}
-            onSubmit={(data) => {
-              // Handle editing movie data here
-              console.log("Editing movie data:", data);
-              props.handleMovieEditFormSubmit(data);
-              closeEditDialog();
-            }}
-          />
-        </Dialog>
+        <> 
+        <EditMovieDialog
+        title="Edit Movie"
+        onClose={closeEditDialog}
+        initialMovie={movieData}
+        handleMovieEditFormSubmit={props.handleMovieEditFormSubmit}
+        closeEditDialog={closeEditDialog}
+      />
+      </>
       )}
       {isDeleteDialogOpen && (
         <Dialog title="DELETE MOVIE" onClose={closeDeleteDialog}>

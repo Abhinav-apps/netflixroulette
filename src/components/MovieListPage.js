@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom'; 
 import axios from 'axios';
 import Counter from './counter';
 import SearchForm from './searchform';
@@ -9,58 +10,99 @@ import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
 import Dialog from './Dialog';
 import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
-import MovieDetails from '../components/Movies/MovieDetails';
-
+import { useParams } from 'react-router-dom';
+import MovieDetails from './Movies/MovieDetails';
 
 function MovieListPage() {
-  const [selectedGenre, setSelectedGenre] = useState(null);
+  const [selectedGenre, setSelectedGenre] = useState('');
   const [currentSort, setCurrentSort] = useState('releaseDate');
-  const [selectedMovie, setSelectedMovie] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [offset, setOffset] = useState(0);
-  const limit = 12;
-  const [totalAmount, setTotalAmount] = useState(0)
+  const limit = 7;
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const [showModal, setShowModal] = useState(false);
+  const [movieInfo, setMovieInfo] = useState(null);
+  const { movieIdParam } = useParams(); // Get the movieId from the URL params
 
   useEffect(() => {
-    //console.log('use effect triggered');
-    const abortController = new AbortController();
-    const signal = abortController.signal;
-
-    const fetchData = async () => {
-      try {
-        const params = {
-          search: searchQuery,
-          searchBy: searchQuery ? 'title' : 'genres',
-          offset: offset,
-          limit: limit,
-          sortBy: currentSort,
-          sortOrder: 'desc',
-          filter: searchQuery ? null : selectedGenre,
-        };
-        const response = await axios.get('http://localhost:4000/movies', {
-          params,
-          signal,
-        });
-        //console.log('params:', params);
-        //console.log('response:', response);
-    
-        setMovies(response.data.data);
-        setTotalAmount(response.data.totalAmount);
-        //console.log('totalAmount' + totalAmount);
-      } catch (error) {
-        console.error('Error fetching data:', error);
+    const fetchMovieDetails = async () => {
+      if (movieIdParam) {
+        try {
+          const response = await axios.get(`http://localhost:4000/movies/${movieIdParam}`);
+          setMovieInfo(response.data); 
+          setShowModal(true);
+        } catch (error) {
+          console.error('Error fetching movie details:', error);
+          setMovieInfo(null);
+        }
       }
     };
 
-    fetchData();
+    fetchMovieDetails();
+  }, [movieIdParam]);
+  
+    // Function to get initial values from URL parameters
+    useEffect(() => {
+      const params = new URLSearchParams(searchParams);
+      setSearchQuery(params.get('query') || '');
+      setSelectedGenre(params.get('genre') || '');
+      setCurrentSort(params.get('sortBy') || 'releaseDate'); // Ensure consistent casing
+      setOffset(parseInt(params.get('offset')) || 0);
+    }, [searchParams]);
 
-    return () => abortController.abort();
-  }, [searchQuery, currentSort, selectedGenre, offset]);
+    // Function to update URL parameters when state changes
+useEffect(() => {
+  const params = new URLSearchParams();
+  if (searchQuery) params.set('query', searchQuery);
+  if (selectedGenre) params.set('genre', selectedGenre);
+  if (currentSort) params.set('sortBy', currentSort);
+  params.set('offset', offset.toString()); // Include offset in URL params
+  if (movieIdParam) {
+    //window.history.pushState({}, '', `/${movieIdParam}?${params.toString()}`);
+    navigate(`/${movieIdParam}?${params.toString()}`);
+  } else {
+    //window.history.pushState({}, '', `/?${params.toString()}`);
+    navigate(`/?${params.toString()}`);
+  }
+}, [searchQuery, selectedGenre, currentSort, offset, navigate]);
+
+  
+
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const params = {
+            search: searchQuery,
+            searchBy: searchQuery ? 'title' : 'genres',
+            offset: offset, // Use the updated offset from state
+            limit: limit,
+            sortBy: currentSort,
+            sortOrder: 'desc',
+            filter: searchQuery ? null : (selectedGenre === 'All' ? null : selectedGenre),
+          };
+          const response = await axios.get('http://localhost:4000/movies', { params });
+    
+          setMovies(response.data.data);
+          setTotalAmount(response.data.totalAmount);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      };
+    
+      fetchData();
+    }, [searchQuery, currentSort, selectedGenre, offset, limit]);
+  
 
   const handleMovieSelect = (movie) => {
-    setSelectedMovie(movie);
+    const currentSearchParams = new URLSearchParams(window.location.search);
+    currentSearchParams.set('movieId', movie.id);
+    //navigate(`?${currentSearchParams.toString()}`);
   };
 
   const openDialog = () => {
@@ -78,16 +120,14 @@ function MovieListPage() {
   };
 
   const handleSearch = (query) => {
-    //console.log('Search button clicked:', query);
     setSearchQuery(query);
     setSelectedGenre(null);
     setOffset(0);
   };
 
   const handleGenreChange = (query) => {
-    //console.log('genre changed to:', query);
     setSearchQuery(null);
-    setSelectedGenre(query === 'All' ? null : query);
+    setSelectedGenre(query);
     setOffset(0);
   };
 
@@ -100,11 +140,21 @@ function MovieListPage() {
       setOffset(offset - limit);
     }
   };
+   
+  const toggleModal = () => {
+    removePathParam();
+    setShowModal(false);
+  }
+
+  const removePathParam = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = '/';
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }
 
   const currentPage = Math.floor(offset / limit) + 1;
-  //console.log( 'totalAmount: '+ totalAmount);
   const totalPages = Math.ceil(totalAmount / limit);
-  //console.log('totalPages: '+ totalPages);
 
   return (
     <div className="div-container">
@@ -117,7 +167,7 @@ function MovieListPage() {
         </Dialog>
       )}
       <Counter initialValue={10} />
-      <SearchForm initialSearchQuery="What do you want to watch?" onSearch={handleSearch} />
+      <SearchForm query={searchQuery} onSearch={handleSearch} />
       <SortAndGenreControl
         genres={['All', 'Documentary', 'Comedy', 'Horror', 'Crime', 'Action']}
         selectedGenre={selectedGenre}
@@ -126,9 +176,16 @@ function MovieListPage() {
         onSortChange={setCurrentSort}
       />
       <br />
-      {selectedMovie ? (
-        <MovieDetails movieInfo={selectedMovie} />
-      ) : (
+      {showModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={toggleModal}>
+              &times;
+            </span>
+            <MovieDetails movieInfo={movieInfo} />
+          </div>
+        </div>
+      )}
         <>
           <MoviesList
             searchQuery={searchQuery}
@@ -142,12 +199,11 @@ function MovieListPage() {
               Previous Page
             </button>
             <span>
-            &nbsp;&nbsp;Page {currentPage} of {totalPages}&nbsp;&nbsp;
-              </span>
+              &nbsp;&nbsp;Page {currentPage} of {totalPages}&nbsp;&nbsp;
+            </span>
             <button onClick={handleNextPage}>&nbsp;&nbsp;&nbsp;Next Page&nbsp;&nbsp;&nbsp;</button>
           </div>
         </>
-      )}
       <br />
     </div>
   );

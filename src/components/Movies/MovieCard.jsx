@@ -1,122 +1,110 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import MovieImage from "./MovieImage";
 import MovieInfo from "./MovieInfo";
 import "./movie.css";
-import Dialog from "../Dialog"; // Import the Dialog component
-import MovieForm from "../MovieForm"; // Import the MovieForm component
+import Dialog from "../Dialog";
+import EditMovieDialog from "../EditMovieDialog";
 
-class MovieCard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showEditMenu: false,
-      isEditDialogOpen: false,
-      movieData: null,
-      isDeleteDialogOpen: false, // Add a state variable for the delete confirmation dialog
-    };
+function MovieCard(props) {
+  const [showEditMenu, setShowEditMenu] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [movieData, setMovieData] = useState(null);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const toggleEditMenu = () => {
+    setShowEditMenu((prevShowEditMenu) => !prevShowEditMenu);
+  };
+
+  const openEditDialog = (data) => {
+    setIsEditDialogOpen(true);
+    setShowEditMenu(false);
+    setMovieData(data);
+    updatePathWithMovieId(data);    
+  };
+
+  const updatePathWithMovieId = (data) => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const movieId = data.id;
+    const newPath = `/${movieId}/edit`;
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
   }
 
-  toggleEditMenu = () => {
-    this.setState((prevState) => ({
-      showEditMenu: !prevState.showEditMenu,
-    }));
+  const closeEditDialog = () => {
+    setIsEditDialogOpen(false);
+    removeMovieIdFromPath();
   };
 
-  openEditDialog = (movieData) => {
-    this.setState({
-      isEditDialogOpen: true,
-      showEditMenu: false,
-      movieData: movieData,
-    });
+  const removeMovieIdFromPath = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = `/`;
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
+  const closeEditMenu = () => {
+    setShowEditMenu(false);
   };
 
-  closeEditDialog = () => {
-    this.setState({
-      isEditDialogOpen: false,
-    });
+  const openDeleteDialog = () => {
+    setIsDeleteDialogOpen(true);
+    setShowEditMenu(false);
   };
 
-  closeEditMenu = () => {
-    this.setState({
-      showEditMenu: false,
-    });
+  const closeDeleteDialog = () => {
+    setIsDeleteDialogOpen(false);
   };
 
-  // Function to open the delete confirmation dialog
-  openDeleteDialog = () => {
-    this.setState({
-      isDeleteDialogOpen: true,
-      showEditMenu: false,
-    });
+  const handleDelete = () => {
+    setIsDeleteDialogOpen(false);
+    // Handle deletion logic
   };
 
-  // Function to close the delete confirmation dialog
-  closeDeleteDialog = () => {
-    this.setState({
-      isDeleteDialogOpen: false,
-    });
-  };
-
-  handleDelete = () => {
-    // Handle the deletion of the movie here
-    // You can call an API or perform other necessary actions
-    // After the deletion is successful, you can close the dialog
-    this.closeDeleteDialog();
-  };
-
-  render() {
-    return (
-      <div className="movie-card" onMouseLeave={this.closeEditMenu}>
-        <div className="dots-overlay" onClick={this.toggleEditMenu}>
-          <i className="fa fa-ellipsis-v"></i>
-        </div>
-        {this.state.showEditMenu && (
-          <div className="edit-menu">
-            <div className="edit-option" onClick={() => this.openEditDialog(this.props.film)}>
-              Edit Movie
-            </div>
-            <div className="edit-option" onClick={this.openDeleteDialog}>Delete Movie</div> {/* Open delete confirmation dialog */}
-          </div>
-        )}
-        <MovieImage
-          toggleShowFilmBody={this.props.toggleShowFilmBody}
-          img={this.props.pictureURL}
-          filmTitle={this.props.name}
-          film={this.props.film}
-        />
-        <MovieInfo
-          description={this.props.tagline}
-          name={this.props.name}
-          year={this.props.year}
-        />
-        {this.state.isEditDialogOpen && (
-          <Dialog title="Edit Movie" onClose={this.closeEditDialog}>
-            <MovieForm
-              initialMovie={this.state.movieData}
-              onSubmit={(data) => {
-                // Handle editing movie data here
-                console.log("Editing movie data:", data);
-                this.closeEditDialog();
-              }}
-            />
-          </Dialog>
-        )}
-        {this.state.isDeleteDialogOpen && (
-          <Dialog title="DELETE MOVIE" onClose={this.closeDeleteDialog}>
-            <div>
-            Are you sure you want to delete this movie?
-            </div>
-            <div className="delete-dialog-buttons">
-              <button onClick={this.handleDelete}>Confirm</button> &nbsp;&nbsp;
-              &nbsp;&nbsp;&nbsp;
-              <button onClick={this.closeDeleteDialog}>Cancel</button>
-            </div>
-          </Dialog>
-        )}
+  return (
+    <div className="movie-card" onMouseLeave={closeEditMenu}>
+      <div className="dots-overlay" onClick={toggleEditMenu}>
+        <i className="fa fa-ellipsis-v"></i>
       </div>
-    );
-  }
+      {showEditMenu && (
+        <div className="edit-menu">
+          <div className="edit-option" onClick={() => openEditDialog(props.film)}>
+            Edit Movie
+          </div>
+          <div className="edit-option" onClick={openDeleteDialog}>
+            Delete Movie
+          </div>
+        </div>
+      )}
+      <MovieImage
+        toggleShowFilmBody={props.toggleShowFilmBody}
+        img={props.pictureURL}
+        filmTitle={props.name}
+        film={props.film}
+      />
+      <MovieInfo description={props.tagline} name={props.name} year={props.year} />
+      {isEditDialogOpen && (
+        <> 
+        <EditMovieDialog
+        title="Edit Movie"
+        onClose={closeEditDialog}
+        initialMovie={movieData}
+        handleMovieEditFormSubmit={props.handleMovieEditFormSubmit}
+        closeEditDialog={closeEditDialog}
+      />
+      </>
+      )}
+      {isDeleteDialogOpen && (
+        <Dialog title="DELETE MOVIE" onClose={closeDeleteDialog}>
+          <div>Are you sure you want to delete this movie?</div>
+          <div className="delete-dialog-buttons">
+            <button onClick={handleDelete}>Confirm</button>&nbsp;&nbsp;&nbsp;
+            <button onClick={closeDeleteDialog}>Cancel</button>
+          </div>
+        </Dialog>
+      )}
+    </div>
+  );
 }
 
 MovieCard.propTypes = {

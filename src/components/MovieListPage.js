@@ -12,6 +12,7 @@ import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
 import { useParams } from 'react-router-dom';
 import MovieDetails from './Movies/MovieDetails';
+import EditMovieDialog from "./EditMovieDialog";
 
 function MovieListPage() {
   const [selectedGenre, setSelectedGenre] = useState('');
@@ -20,15 +21,18 @@ function MovieListPage() {
   const [movies, setMovies] = useState([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [offset, setOffset] = useState(0);
-  const limit = 7;
+  const limit = 8;
   const [totalAmount, setTotalAmount] = useState(0);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [newMovieId, setNewMovieId] = useState('');
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   const [showModal, setShowModal] = useState(false);
   const [movieInfo, setMovieInfo] = useState(null);
-  const { movieIdParam } = useParams(); // Get the movieId from the URL params
+  const { movieIdParam, movieIdForEdit } = useParams(); // Get the movieId from the URL params
 
   useEffect(() => {
     const fetchMovieDetails = async () => {
@@ -42,10 +46,20 @@ function MovieListPage() {
           setMovieInfo(null);
         }
       }
+      if (movieIdForEdit) {
+        try {
+          const response = await axios.get(`http://localhost:4000/movies/${movieIdForEdit}`);
+          setMovieInfo(response.data); 
+          setIsEditDialogOpen(true);
+        } catch (error) {
+          console.error('Error fetching movie details:', error);
+          setMovieInfo(null);
+        }
+      }
     };
 
     fetchMovieDetails();
-  }, [movieIdParam]);
+  }, [movieIdParam, movieIdForEdit]);
   
     // Function to get initial values from URL parameters
     useEffect(() => {
@@ -66,6 +80,13 @@ useEffect(() => {
   if (movieIdParam) {
     //window.history.pushState({}, '', `/${movieIdParam}?${params.toString()}`);
     navigate(`/${movieIdParam}?${params.toString()}`);
+  } else if (movieIdForEdit) {
+    //window.history.pushState({}, '', `/${movieIdForEdit}/edit?${params.toString()}`);
+    navigate(`/${movieIdForEdit}/edit?${params.toString()}`);
+  } else if (window.location.pathname === '/new') {
+    setIsDialogOpen(true);
+    // to ensure that the '/new' path remains in the URL
+    navigate(`/new?${params.toString()}`);
   } else {
     //window.history.pushState({}, '', `/?${params.toString()}`);
     navigate(`/?${params.toString()}`);
@@ -97,8 +118,8 @@ useEffect(() => {
     
       fetchData();
     }, [searchQuery, currentSort, selectedGenre, offset, limit]);
-  
 
+  
   const handleMovieSelect = (movie) => {
     const currentSearchParams = new URLSearchParams(window.location.search);
     currentSearchParams.set('movieId', movie.id);
@@ -107,17 +128,63 @@ useEffect(() => {
 
   const openDialog = () => {
     setIsDialogOpen(true);
+    updatePathForAddForm();
   };
+
+  const updatePathForAddForm = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = '/new';
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }
 
   const closeDialog = () => {
     setIsDialogOpen(false);
+    const urlParams = new URLSearchParams(window.location.search);
+    const newUrl = `/?${urlParams.toString()}`;
+    //alert ('newURL' + newUrl);
+    navigate(newUrl);
   };
 
-  const handleMovieFormSubmit = (data) => {
-    closeDialog();
-    alert(`Submitting data: ${JSON.stringify(data)}`);
-    // Add logic to send the data to the backend
+  const handleMovieAddFormSubmit = async (data) => {
+    try {
+      closeDialog();
+      //alert(`Submitting data: ${JSON.stringify(data)}`);
+      const response = await axios.post('http://localhost:4000/movies', data);
+      const newMovieId = response.data.id;
+      setNewMovieId(newMovieId);
+      setSuccessMessage('Movie Added Successfully...');
+    } catch (error) {
+      setSuccessMessage('Error occured while trying to add...');
+      console.error('Error adding movie:', error);
+    }
   };
+
+  const handleMovieEditFormSubmit = async (data) => {
+    try {
+      const response = await axios.put('http://localhost:4000/movies', data);
+      const urlParams = new URLSearchParams(window.location.search);
+      setSuccessMessage('Movie Edited Successfully...');
+    } catch (error) {
+      setSuccessMessage('Error occured while trying to edit...');
+      console.error('Error adding movie:', error);
+    }
+  }
+
+  const closeSuccessMessageDialog = () => {
+    if (successMessage  === 'Movie Edited Successfully...') {
+      setSuccessMessage('');
+      // to refresh page
+      window.location.reload();
+    }
+    if (successMessage  === 'Movie Added Successfully...' ){
+      setSuccessMessage('');
+      // to update path with movieId
+      const urlParams = new URLSearchParams(window.location.search);
+      const newUrl = `/${newMovieId}?${urlParams.toString()}`;
+      navigate(newUrl);
+    }
+  }
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -153,6 +220,18 @@ useEffect(() => {
     window.history.pushState({}, '', newUrl);
   }
 
+  const closeEditDialog = () => {
+    setIsEditDialogOpen(false);
+    removeMovieIdFromPath();
+  };
+
+  const removeMovieIdFromPath = () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const newPath = `/`;
+    const newUrl = `${newPath}?${urlParams.toString()}`;
+    window.history.pushState({}, '', newUrl);
+  }
+
   const currentPage = Math.floor(offset / limit) + 1;
   const totalPages = Math.ceil(totalAmount / limit);
 
@@ -161,9 +240,24 @@ useEffect(() => {
       <button className="add-movie-button" onClick={openDialog}>
         Add Movie
       </button>
+      {isEditDialogOpen && (
+        <> 
+        <EditMovieDialog
+        title="Edit Movie"
+        onClose={closeEditDialog}
+        initialMovie={movieInfo}
+        handleMovieEditFormSubmit={handleMovieEditFormSubmit}
+        closeEditDialog={closeEditDialog}
+      />
+      </>
+      )}
       {isDialogOpen && (
         <Dialog title="ADD MOVIE" onClose={closeDialog}>
-          <MovieForm onSubmit={(data) => handleMovieFormSubmit(data)} />
+          <MovieForm onSubmit={(data) => handleMovieAddFormSubmit(data)} />
+        </Dialog>
+      )}
+       {successMessage && (
+        <Dialog title={successMessage} onClose={() => closeSuccessMessageDialog()}>
         </Dialog>
       )}
       <Counter initialValue={10} />
@@ -193,6 +287,7 @@ useEffect(() => {
             currentSort={currentSort}
             onMovieSelect={handleMovieSelect}
             movies={movies}
+            handleMovieEditFormSubmit={handleMovieEditFormSubmit}
           />
           <div>
             <button onClick={handlePrevPage} disabled={offset === 0}>

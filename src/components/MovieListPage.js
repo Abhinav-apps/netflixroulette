@@ -5,13 +5,13 @@ import Counter from './counter';
 import SearchForm from './searchform';
 import '../index.css';
 import '../components/Header/header.css';
-import MoviesList from './Movies/MovieList';
-import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
+//import MoviesList from './Movies/MovieList';
+//import SortAndGenreControl from './SortAndGenreControl/SortAndGenreControl';
 import Dialog from './Dialog';
 import MovieForm from './MovieForm';
 import 'font-awesome/css/font-awesome.min.css';
 import { useParams } from 'react-router-dom';
-import MovieDetails from './Movies/MovieDetails';
+//import MovieDetails from './Movies/MovieDetails';
 import EditMovieDialog from "./EditMovieDialog";
 
 function MovieListPage() {
@@ -96,29 +96,30 @@ useEffect(() => {
   
 
     useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const params = {
-            search: searchQuery,
-            searchBy: searchQuery ? 'title' : 'genres',
-            offset: offset, // Use the updated offset from state
-            limit: limit,
-            sortBy: currentSort,
-            sortOrder: 'desc',
-            filter: searchQuery ? null : (selectedGenre === 'All' ? null : selectedGenre),
-          };
-          const response = await axios.get('http://localhost:4000/movies', { params });
-    
-          setMovies(response.data.data);
-          setTotalAmount(response.data.totalAmount);
-        } catch (error) {
-          console.error('Error fetching data:', error);
-        }
-      };
     
       fetchData();
     }, [searchQuery, currentSort, selectedGenre, offset, limit]);
 
+      
+    const fetchData = async () => {
+      try {
+        const params = {
+          search: searchQuery,
+          searchBy: searchQuery ? 'title' : 'genres',
+          offset: offset, // Use the updated offset from state
+          limit: limit,
+          sortBy: currentSort,
+          sortOrder: 'desc',
+          filter: searchQuery ? null : (selectedGenre === 'All' ? null : selectedGenre),
+        };
+        const response = await axios.get('http://localhost:4000/movies', { params });
+  
+        setMovies([...response.data.data]);
+        setTotalAmount(response.data.totalAmount);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
   
   const handleMovieSelect = (movie) => {
     const currentSearchParams = new URLSearchParams(window.location.search);
